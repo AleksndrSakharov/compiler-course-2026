@@ -47,8 +47,7 @@ getCheckedPointerRegister(const MachineInstr &MI) {
   if (!MemOpStart.has_value())
     return std::nullopt;
 
-  const MachineOperand &BaseOp =
-      MI.getOperand(*MemOpStart + X86::AddrBaseReg);
+  const MachineOperand &BaseOp = MI.getOperand(*MemOpStart + X86::AddrBaseReg);
   if (!BaseOp.isReg())
     return std::nullopt;
 
