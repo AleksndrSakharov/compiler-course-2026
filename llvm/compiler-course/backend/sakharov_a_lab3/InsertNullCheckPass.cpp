@@ -14,7 +14,7 @@ using namespace llvm;
 
 namespace {
 
-static bool isStackOrFrameRegister(Register Reg) {
+bool isStackOrFrameRegister(Register Reg) {
   switch (Reg.id()) {
   case X86::RSP:
   case X86::ESP:
@@ -26,7 +26,7 @@ static bool isStackOrFrameRegister(Register Reg) {
   }
 }
 
-static std::optional<unsigned> getMemoryOperandStart(const MachineInstr &MI) {
+std::optional<unsigned> getMemoryOperandStart(const MachineInstr &MI) {
   const MCInstrDesc &Desc = MI.getDesc();
   int MemOpStart = X86II::getMemoryOperandNo(Desc.TSFlags);
   if (MemOpStart < 0)
@@ -35,7 +35,7 @@ static std::optional<unsigned> getMemoryOperandStart(const MachineInstr &MI) {
   return static_cast<unsigned>(MemOpStart + X86II::getOperandBias(Desc));
 }
 
-static std::optional<Register>
+std::optional<Register>
 getCheckedPointerRegister(const MachineInstr &MI) {
   if (MI.isCall() || MI.isBranch() || MI.isInlineAsm())
     return std::nullopt;
@@ -58,9 +58,9 @@ getCheckedPointerRegister(const MachineInstr &MI) {
   return BaseReg;
 }
 
-static void dropRedefinedRegisters(const MachineInstr &MI,
-                                   const TargetRegisterInfo *TRI,
-                                   SmallSet<Register, 8> &CheckedRegs) {
+void dropRedefinedRegisters(const MachineInstr &MI,
+                            const TargetRegisterInfo *TRI,
+                            SmallSet<Register, 8> &CheckedRegs) {
   SmallVector<Register, 4> InvalidatedRegs;
   for (Register Reg : CheckedRegs) {
     if (MI.modifiesRegister(Reg, TRI))
