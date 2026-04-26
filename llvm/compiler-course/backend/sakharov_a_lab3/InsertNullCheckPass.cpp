@@ -35,8 +35,7 @@ std::optional<unsigned> getMemoryOperandStart(const MachineInstr &MI) {
   return static_cast<unsigned>(MemOpStart + X86II::getOperandBias(Desc));
 }
 
-std::optional<Register>
-getCheckedPointerRegister(const MachineInstr &MI) {
+std::optional<Register> getCheckedPointerRegister(const MachineInstr &MI) {
   if (MI.isCall() || MI.isBranch() || MI.isInlineAsm())
     return std::nullopt;
 
