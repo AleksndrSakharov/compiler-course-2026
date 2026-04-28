@@ -1,7 +1,7 @@
 #include "mlir/Dialect/Affine/Analysis/LoopAnalysis.h"
 #include "mlir/Dialect/Affine/IR/AffineOps.h"
-#include "mlir/IR/BuiltinOps.h"
 #include "mlir/IR/Builders.h"
+#include "mlir/IR/BuiltinOps.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Tools/Plugins/PassPlugin.h"
 #include <cstdint>
@@ -30,9 +30,8 @@ public:
       if (!tripCount)
         return;
 
-      forOp->setAttr(
-          "trip_count",
-          builder.getI64IntegerAttr(static_cast<int64_t>(*tripCount)));
+      forOp->setAttr("trip_count", builder.getI64IntegerAttr(
+                                       static_cast<int64_t>(*tripCount)));
     });
   }
 };
