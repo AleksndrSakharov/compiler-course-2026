@@ -24,7 +24,8 @@ public:
     Builder builder(&getContext());
 
     getOperation().walk([&](affine::AffineForOp forOp) {
-      forOp->removeAttr("trip_count");
+      if (forOp->hasAttr("trip_count"))
+        return;
 
       std::optional<uint64_t> tripCount = affine::getConstantTripCount(forOp);
       if (!tripCount)

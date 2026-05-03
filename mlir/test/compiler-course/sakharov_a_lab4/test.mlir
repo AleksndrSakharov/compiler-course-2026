@@ -74,13 +74,12 @@ func.func @unknown_trip_count(%arg0: index, %arg1: memref<?xi32>) {
   return
 }
 
-// CHECK-LABEL: func.func @unknown_trip_count_removes_old_attr
-// CHECK: affine.for %{{.*}} = 0 to %{{.*}} {
-// CHECK-NOT: trip_count
-// CHECK: return
-func.func @unknown_trip_count_removes_old_attr(%arg0: index, %arg1: memref<?xi32>) {
-  affine.for %i = 0 to %arg0 {
-    %0 = affine.load %arg1[%i] : memref<?xi32>
+// CHECK-LABEL: func.func @existing_trip_count_is_preserved
+// CHECK: affine.for %{{.*}} = 0 to 10 {
+// CHECK: } {trip_count = 123 : i64}
+func.func @existing_trip_count_is_preserved(%arg0: memref<20xi32>) {
+  affine.for %i = 0 to 10 {
+    %0 = affine.load %arg0[%i] : memref<20xi32>
   } {trip_count = 123 : i64}
   return
 }
